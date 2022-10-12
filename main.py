@@ -55,9 +55,7 @@ def roman_to_int(rom_num):
             converted_to_integer += letter_combos_dict[key]
             temp_str = temp_str.replace(key, '')
 
-    rom_num = temp_str
-
-    for letter in rom_num:
+    for letter in temp_str:
         explanation.append(letter + ' = ' + str(value_dict[letter]))
         converted_to_integer += value_dict[letter]
 #        temp_str = temp_str.replace(_, '')
@@ -65,6 +63,7 @@ def roman_to_int(rom_num):
     print(f'Roman numeral {rom_num} = {converted_to_integer}')
     print('Explanation: ', end='')
     print(*explanation, sep=", ")
+    print()
 
 
 def main():
