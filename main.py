@@ -43,22 +43,28 @@ letter_combos_dict = {
     "IV": 4,
 }
 
+
 def roman_to_int(rom_num):
     converted_to_integer = 0
     temp_str = rom_num
+    explanation = []
 
     for key in letter_combos_dict:
         if key in rom_num:
+            explanation.append(key + ' = ' + str(letter_combos_dict[key]))
             converted_to_integer += letter_combos_dict[key]
             temp_str = temp_str.replace(key, '')
 
     rom_num = temp_str
 
-    for _ in rom_num:
-        converted_to_integer += value_dict[_]
+    for letter in rom_num:
+        explanation.append(letter + ' = ' + str(value_dict[letter]))
+        converted_to_integer += value_dict[letter]
 #        temp_str = temp_str.replace(_, '')
 
     print(f'Roman numeral {rom_num} = {converted_to_integer}')
+    print('Explanation: ', end='')
+    print(*explanation, sep=", ")
 
 
 def main():
