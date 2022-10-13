@@ -1,7 +1,7 @@
 import re
 
 
-def is_roman_number():
+def is_roman_number():  # TODO add exception for null input
     while True:
         num = input("Please enter a valid Roman numeral: ")
 
@@ -34,42 +34,44 @@ value_dict = {
     "I": 1
 }
 
-letter_combos_dict = {
-    "CM": 900,
-    "CD": 400,
-    "XC": 90,
-    "XL": 40,
-    "IX": 9,
-    "IV": 4,
-}
 
-
-def roman_to_int(rom_num):
-    converted_to_integer = 0
-    temp_str = rom_num
+def roman_to_int(rom_num: str):
+    arabic_num = 0
     explanation = []
+    rom_num_as_list = []
+    used_temp_elements = []
 
-    for key in letter_combos_dict:
-        if key in rom_num:
-            explanation.append(key + ' = ' + str(letter_combos_dict[key]))
-            converted_to_integer += letter_combos_dict[key]
-            temp_str = temp_str.replace(key, '')
+    for _ in range(len(rom_num) + 1):
+        if rom_num[:2] in value_dict.keys():     # test first 2 letters
+            rom_num_as_list.append(rom_num[:2])  # special? add double letter combo to list
+            rom_num = rom_num[2:]               # and remove first 2 letters from beginning
+        else:
+            rom_num_as_list.append(rom_num[:1])  # not special? add single letter to list
+            rom_num = rom_num[1:]               # and remove single letter from beginning
 
-    for letter in temp_str:
-        explanation.append(letter + ' = ' + str(value_dict[letter]))
-        converted_to_integer += value_dict[letter]
+    # TODO figure out why getting blank items so I can delete this filter
+    rom_num_as_list = list(filter(None, rom_num_as_list))  
 
-    print(f'Roman numeral {rom_num} = {converted_to_integer}')
-    print('Explanation: ', end='')
-    print(*explanation, sep=", ")
-    print()
+    for element in rom_num_as_list:
+        element_value = value_dict[element]
+        arabic_num += element_value
+
+        if element not in used_temp_elements:
+            num_appearances = rom_num_as_list.count(element)
+            explanation.append(num_appearances * element + ' = ' + str(num_appearances * element_value))
+            used_temp_elements.append(element)
+
+    return arabic_num, explanation
 
 
 def main():
     while True:
         roman_original = is_roman_number()
-        roman_to_int(roman_original)
-        answer = input("Press enter to continue or (q to quit).")
+        arabic_num, explanation = roman_to_int(roman_original)
+        print(f'\nRoman numeral {roman_original} = {arabic_num}')
+        print(*explanation, sep=", ")
+
+        answer = input("\nPress enter to continue or (q to quit).")
         if answer == "q":
             break
 
